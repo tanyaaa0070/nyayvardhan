@@ -1,0 +1,30 @@
+# ===================================================
+# NyayVandan - Judicial Decision Support System
+# All dependencies are local/offline-capable
+# ===================================================
+
+# Web Framework
+fastapi
+uvicorn[standard]
+
+# NLP & ML (all local models)
+spacy>=3.5
+sentence-transformers>=2.2.0
+faiss-cpu>=1.7.4
+
+# Data Processing
+pandas>=1.5.0
+numpy>=1.23.0
+
+# ML Utilities
+scikit-learn>=1.2.0
+
+# Explainability (local, offline)
+lime>=0.2.0
+shap>=0.42.0
+
+# Data Validation
+pydantic>=2.0.0
+
+# CORS support
+python-multipart>=0.0.5

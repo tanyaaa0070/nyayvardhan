@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NyayVandan — Judicial Decision Support System</title>
+    <meta name="description" content="NyayVandan: An Explainable, Ethical, and Precedent-Aware Judicial AI System for Indian courts. Advisory-only, offline-first, precedent-driven case analysis.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ================================================================
+     LOADING OVERLAY (shown during case analysis)
+     ================================================================ -->
+<div id="loadingOverlay" class="spinner-overlay hidden">
+    <div class="spinner"></div>
+    <p class="spinner-text">Analyzing case precedents...</p>
+</div>
+
+<!-- ================================================================
+     SCREEN 1: LANDING PAGE
+     ================================================================ -->
+<div id="landingPage" class="landing-page">
+    
+    <div class="landing-emblem">
+        <span class="emblem-icon">⚖️</span>
+    </div>
+    
+    <h1 class="landing-title">NyayVandan</h1>
+    
+    <p class="landing-tagline">
+        "An Explainable, Ethical, and Precedent-Aware Judicial AI System"
+    </p>
+    
+    <div class="landing-features">
+        <!-- Feature 1: Precedent-Based Reasoning -->
+        <div class="feature-card" id="featureCard1">
+            <span class="feature-icon">📜</span>
+            <h3 class="feature-title">Precedent-Based Reasoning</h3>
+            <p class="feature-desc">
+                Retrieves similar past judgments using semantic and legal entity analysis 
+                from Indian court datasets. No prediction — only relevant precedents.
+            </p>
+        </div>
+        
+        <!-- Feature 2: Explainable AI -->
+        <div class="feature-card" id="featureCard2">
+            <span class="feature-icon">🔍</span>
+            <h3 class="feature-title">Explainable AI</h3>
+            <p class="feature-desc">
+                Every retrieved case comes with a clear explanation of similarity — 
+                overlapping legal sections, shared concepts, and influential terms.
+            </p>
+        </div>
+        
+        <!-- Feature 3: Ethical & Constitutional Alignment -->
+        <div class="feature-card" id="featureCard3">
+            <span class="feature-icon">🛡️</span>
+            <h3 class="feature-title">Ethical Alignment</h3>
+            <p class="feature-desc">
+                Built-in bias detection, diversity scoring, and constitutional 
+                alignment checks ensure fair and balanced judicial assistance.
+            </p>
+        </div>
+    </div>
+    
+    <button id="btnGoToLogin" class="btn btn-primary" onclick="showPage('loginPage')">
+        ⚖ Login to System
+    </button>
+    
+    <div class="landing-footer">
+        <p>⚠️ NyayVandan is advisory only. It never replaces judicial discretion.</p>
+    </div>
+</div>
+
+
+<!-- ================================================================
+     SCREEN 2: LOGIN PAGE (UI-ONLY, no real authentication)
+     ================================================================ -->
+<div id="loginPage" class="login-page hidden">
+    <div class="login-card">
+        
+        <div class="login-emblem">⚖️</div>
+        <h2 class="login-title">NyayVandan</h2>
+        <p class="login-subtitle">Judicial Access Portal</p>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label class="form-label" for="loginUsername">Username</label>
+                <input 
+                    type="text" 
+                    id="loginUsername" 
+                    class="form-input" 
+                    placeholder="Enter judicial username"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="loginPassword">Password</label>
+                <input 
+                    type="password" 
+                    id="loginPassword" 
+                    class="form-input" 
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+            
+            <button type="submit" id="btnLogin" class="btn btn-primary">
+                ⚖ Enter Judicial Dashboard
+            </button>
+        </form>
+        
+        <div class="login-back">
+            <a href="#" onclick="showPage('landingPage')">← Back to Home</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- ================================================================
+     SCREEN 3: DASHBOARD (Main Application)
+     ================================================================ -->
+<div id="dashboardPage" class="dashboard-layout hidden">
+    
+    <!-- ==================== LEFT SIDEBAR ==================== -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-logo">⚖️</span>
+            <div class="sidebar-title">NyayVandan</div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-item active" id="navCaseAnalysis" onclick="switchTab('caseAnalysis')">
+                <span class="nav-icon">📋</span>
+                <span>Case Analysis</span>
+            </div>
+            <div class="nav-item" id="navEthicalReview" onclick="switchTab('ethicalReview')">
+                <span class="nav-icon">🛡️</span>
+                <span>Ethical Review</span>
+            </div>
+            <div class="nav-item" id="navAbout" onclick="switchTab('about')">
+                <span class="nav-icon">ℹ️</span>
+                <span>About System</span>
+            </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="showPage('landingPage')">
+                <span>🚪</span>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+    
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="main-content">
+        
+        <!-- ====== TAB: Case Analysis ====== -->
+        <div id="tabCaseAnalysis">
+            
+            <div class="page-header">
+                <h1>⚖ Case Analysis</h1>
+                <p>Enter case facts to retrieve similar precedents with explanations</p>
+            </div>
+            
+            <!-- 1. Case Input Panel -->
+            <div class="panel panel-gold" id="caseInputPanel">
+                <div class="panel-header">
+                    <span class="icon">📝</span>
+                    <h3>Enter Case Facts</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="caseTextInput">Case Description / Facts</label>
+                    <textarea 
+                        id="caseTextInput" 
+                        class="form-textarea" 
+                        placeholder="Enter the facts of the case here. Include relevant details such as charges (IPC sections), procedural aspects (CrPC), constitutional questions, and key facts..."
+                        rows="8"
+                    ></textarea>
+                </div>
+                
+                <div style="display: flex; gap: var(--spacing-md); align-items: flex-end; flex-wrap: wrap;">
+                    <div class="form-group" style="margin-bottom: 0; min-width: 200px;">
+                        <label class="form-label" for="topKSelect">Number of Similar Cases</label>
+                        <select id="topKSelect" class="form-select">
+                            <option value="3">Top 3 Precedents</option>
+                            <option value="5" selected>Top 5 Precedents</option>
+                            <option value="7">Top 7 Precedents</option>
+                            <option value="10">Top 10 Precedents</option>
+                        </select>
+                    </div>
+                    
+                    <button id="btnAnalyze" class="btn btn-primary" onclick="analyzeCase()">
+                        ⚖ Analyze Case
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 2. Extracted Legal Entities Panel -->
+            <div id="entitiesPanel" class="panel hidden">
+                <div class="panel-header">
+                    <span class="icon">🏛️</span>
+                    <h3>Extracted Legal Entities</h3>
+                </div>
+                <div id="entitiesContent"></div>
+            </div>
+            
+            <!-- 3. Similar Precedents Panel -->
+            <div id="precedentsPanel" class="hidden">
+                <div class="page-header">
+                    <h2>📜 Similar Precedents</h2>
+                    <p id="precedentsSubtitle"></p>
+                </div>
+                <div id="precedentsContent"></div>
+            </div>
+            
+            <!-- 4. Explainability Panel -->
+            <div id="explanationsPanel" class="hidden">
+                <div class="page-header">
+                    <h2>🔍 Explainability — Why These Cases?</h2>
+                    <p>Detailed explanation of similarity for each retrieved precedent</p>
+                </div>
+                <div id="explanationsContent"></div>
+            </div>
+            
+            <!-- Disclaimer -->
+            <div id="disclaimerPanel" class="disclaimer hidden">
+                <p id="disclaimerText"></p>
+            </div>
+            
+        </div>
+        
+        <!-- ====== TAB: Ethical Review ====== -->
+        <div id="tabEthicalReview" class="hidden">
+            
+            <div class="page-header">
+                <h1>🛡️ Ethical Review</h1>
+                <p>Bias detection, diversity assessment, and constitutional alignment</p>
+            </div>
+            
+            <div id="ethicsPlaceholder" class="panel">
+                <p class="text-muted text-center" style="padding: var(--spacing-xl);">
+                    Run a case analysis first to see the ethical review of retrieved precedents.
+                </p>
+            </div>
+            
+            <div id="ethicsContent" class="hidden">
+                
+                <!-- Diversity Score -->
+                <div class="panel" id="diversityPanel">
+                    <div class="panel-header">
+                        <span class="icon">📊</span>
+                        <h3>Precedent Diversity Score</h3>
+                    </div>
+                    <div id="diversityContent"></div>
+                </div>
+                
+                <!-- Bias Warnings -->
+                <div class="panel" id="biasPanel">
+                    <div class="panel-header">
+                        <span class="icon">⚠️</span>
+                        <h3>Bias Warnings</h3>
+                    </div>
+                    <div id="biasContent"></div>
+                </div>
+                
+                <!-- Constitutional Alignment -->
+                <div class="panel" id="constitutionalPanel">
+                    <div class="panel-header">
+                        <span class="icon">📕</span>
+                        <h3>Constitutional Alignment Notes</h3>
+                    </div>
+                    <div id="constitutionalContent"></div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- ====== TAB: About System ====== -->
+        <div id="tabAbout" class="hidden">
+            <div class="page-header">
+                <h1>ℹ️ About NyayVandan</h1>
+            </div>
+            
+            <div class="about-content">
+                <h2>System Overview</h2>
+                <p>
+                    <strong>NyayVandan</strong> is a Judicial Decision Support System that assists judges and 
+                    legal researchers by retrieving similar Indian legal cases, explaining why they are similar, 
+                    and surfacing legal principles, statutes, and ethical alerts.
+                </p>
+                <p>
+                    <strong style="color: var(--accent-gold);">
+                    "NyayVandan assists judicial reasoning by retrieving, explaining, and ethically evaluating 
+                    similar legal precedents using offline AI models — without predicting outcomes or replacing 
+                    human judgment."
+                    </strong>
+                </p>
+                
+                <h3>⚖ Core Principles</h3>
+                <ul>
+                    <li>Advisory, not predictive — no outcome predictions or probability scores</li>
+                    <li>Explainable & precedent-aware — every result comes with reasoning</li>
+                    <li>Offline-first — all models and data are local, no external APIs</li>
+                    <li>Dataset-driven — powered by Indian court judgment datasets</li>
+                    <li>Judge-centric — designed for judicial workflows and language</li>
+                    <li>Ethically constrained — built-in bias detection and constitutional alignment</li>
+                </ul>
+                
+                <h3>🧠 Technology Stack</h3>
+                <ul>
+                    <li>Sentence-BERT (local) — Semantic text embedding</li>
+                    <li>FAISS — Fast approximate nearest neighbor search</li>
+                    <li>spaCy — Legal named entity recognition</li>
+                    <li>TF-IDF — Lexical similarity scoring</li>
+                    <li>LIME/SHAP — Explainability of similarity</li>
+                    <li>FastAPI — Backend REST API</li>
+                </ul>
+                
+                <h3>🔐 What NyayVandan Does NOT Do</h3>
+                <ul>
+                    <li>Does NOT predict case outcomes</li>
+                    <li>Does NOT assign probability scores</li>
+                    <li>Does NOT automate judicial decisions</li>
+                    <li>Does NOT replace human judgment</li>
+                    <li>Does NOT use external or paid APIs</li>
+                </ul>
+                
+                <h3>📦 Data Source</h3>
+                <p>
+                    NyayVandan uses locally stored Indian court judgment datasets (Kaggle). 
+                    The dataset includes case facts, court information, applicable legal sections 
+                    (IPC, CrPC, Constitutional Articles), and judgment outcomes.
+                </p>
+                
+                <div class="disclaimer" style="margin-top: var(--spacing-xl);">
+                    <p>
+                        ⚠️ <strong>Disclaimer:</strong> NyayVandan is an advisory system only. All outputs are 
+                        for judicial reference and research purposes. This system does not predict outcomes, 
+                        assign probabilities, or automate any judicial decision. Judicial discretion remains paramount.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+</div>
+
+<!-- ================================================================
+     JAVASCRIPT
+     ================================================================ -->
+<script src="app.js"></script>
+
+</body>
+</html>
