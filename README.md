@@ -152,7 +152,7 @@ Similarity = 0.5 × Semantic + 0.3 × Lexical + 0.2 × Entity Overlap
 ## 👨‍💻 Team
 - **Tanya Singh**
 - **Snigdha**
-- **Yashwanti**
+- **Yaswanti**
 
 **Mentor:** Divyanshu Kumar  
 **Domain:** Artificial Intelligence in Law
